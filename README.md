@@ -4,5 +4,28 @@
 A general website TODO list, with notes on how and when the tasks where achieved. Site build with startbootstrap-landing-page and hosted on Github pages.
 
 
-BlackrockDigital/startbootstrap-landing-page
-https://github.com/BlackrockDigital/startbootstrap-landing-page
+### Tuesday 13 June 2017
+
+- [x] clone startbootstrap-landing-page
+
+	BlackrockDigital/startbootstrap-landing-page
+	https://github.com/BlackrockDigital/startbootstrap-landing-page
+
+
+- [x] change url/dns to *.chdd.co.uk & www.chdd.co.uk
+
+	Google domains 
+
+	NAME | TYPE  | TTL | DATA
+	---- | ----- | --- | ----
+	@    |  A    | 1h  | 192.30.252.153 192.30.252.154
+	www  | CNAME | 1h  | chdd-ltd.github.io.
+
+	/CNAME
+
+		chdd.co.uk
+		www.chdd.co.uk
+
+
+
+
