@@ -4,6 +4,10 @@
 A general website TODO list, with notes on how and when the tasks where achieved. Site build with startbootstrap-landing-page and hosted on Github pages.
 
 
+### Friday 16 June 2017
+
+- [x] Basic index.html edits
+
 ### Tuesday 13 June 2017
 
 - [x] clone startbootstrap-landing-page
