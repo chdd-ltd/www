@@ -3,6 +3,11 @@
 ## website TODO list
 A general website TODO list, with notes on how and when the tasks where achieved. Site build with startbootstrap-landing-page and hosted on Github pages.
 
+### Tuesday 16 January 2018
+
+- [x] clone startbootstrap-grayscale
+	https://blackrockdigital.github.io/startbootstrap-grayscale/
+
 
 ### Friday 16 June 2017
 
