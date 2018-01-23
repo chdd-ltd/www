@@ -45,8 +45,7 @@ a {
   transition: all 0.2s ease-in-out;
   color: #42DCA3; }
   a:focus, a:hover {
-    text-decoration: none;
-    color: #1d9b6c; }
+    text-decoration: none; }
 
 #mainNav {
   font-family: 'Cabin', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -124,6 +123,26 @@ a {
       .masthead .intro-body .intro-text {
         font-size: 22px; } }
 
+.btn-circle-img {
+  font-size: 26px;
+  width: 55px;
+  height: 55px;
+  margin-top: 15px;
+  line-height: 45px;
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+  color: black;
+  border: 2px solid black;
+  border-radius: 100% !important;
+  background: transparent; }
+  .btn-circle-img:focus, .btn-circle-img:hover {
+    color: transparent;
+    color: white;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1); }
+
+
 .btn-circle {
   font-size: 26px;
   width: 55px;
@@ -136,11 +155,14 @@ a {
   color: black;
   border: 2px solid black;
   border-radius: 100% !important;
-  background: black; }
+  background: transparent; }
   .btn-circle:focus, .btn-circle:hover {
-    color: white;
+    color: transparent;
+    color: black;
     outline: none;
     background: rgba(255, 255, 255, 0.1); }
+
+
 
 .content-section {
   padding-top: 150px;
