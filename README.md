@@ -27,7 +27,7 @@ A general website TODO list, with notes on how and when the tasks where achieved
 
 	NAME | TYPE  | TTL | DATA
 	---- | ----- | --- | ----
-	@    |  A    | 1h  | 192.30.252.153 192.30.252.154
+	@    |  A    | 1h  | 185.199.108.153 185.199.109.153 185.199.110.153 185.199.111.153
 	www  | CNAME | 1h  | chdd-ltd.github.io.
 
 	/CNAME
