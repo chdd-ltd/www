@@ -2,6 +2,8 @@
 
 bundle exec jekyll serve --livereload
 
+TODO
+
 - [] Site Logo:
 
 
