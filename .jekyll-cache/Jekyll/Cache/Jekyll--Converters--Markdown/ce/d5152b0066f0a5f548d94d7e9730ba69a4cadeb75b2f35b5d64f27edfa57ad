@@ -1,3 +1,0 @@
-I"�<p>Without good key management, no cryptographic system is secure. Full knowledge of the Who, What, When, Where, Why and How of your keys is imperative for good security. Using an SSH Certificate Authority (CA) will vastly simplify and improve the efficacy of SSH infrastructure. You will no longer have default usernames and passwords (root:toor). You will no longer have to copy everyone’s public key into every server while trying to remember whose key is whos. You will no longer be tempted to create “One key to rule them ALL” and give that key to everyone who needs it. Your key management process will be reduced to installing a CA’s public key to each system and signing users public keys.</p>
-
-:ET

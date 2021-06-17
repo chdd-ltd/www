@@ -3,7 +3,6 @@
 bundle exec jekyll serve --livereload
 
 - [] Site Logo:
-- [] /favicon.ico
 
 
 Writing on GitHub

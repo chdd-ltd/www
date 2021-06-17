@@ -1,2 +1,9 @@
 .DS_Store
 .idea
+.DS_Store
+.idea
+.jekyll-cache
+.jekyll-metadata
+.sass-cache
+.zsh_history
+_site
