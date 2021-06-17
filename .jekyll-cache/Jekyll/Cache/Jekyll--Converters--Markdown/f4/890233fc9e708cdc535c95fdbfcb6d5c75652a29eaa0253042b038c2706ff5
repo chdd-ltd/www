@@ -1,0 +1,311 @@
+I"r:<p><a href="https://en.wikipedia.org/wiki/Typosquatting">Typosquatting</a> <sup><a href="#1">1</a></sup> is the Internets version of occupying empty buildings, without permission “<a href="https://en.wikipedia.org/wiki/Squatting">Squatting</a>“<sup><a href="#2">2</a></sup>.</p>
+
+<p>In this article, we describe a process that can be conducted to determine whether or not you have squatters on your branded domains. It is a manual process and covers the basic forms of typo and TLD squatting. It is intended to be carried out as a “<a href="https://en.wikipedia.org/wiki/Proof_of_concept">Proof of Concept</a>” <sup><a href="#3">3</a></sup> to ascertain if you have squatters and whether a more rigorous, automated process would be of value in your broader risk management process.</p>
+
+<p>The output of this process is a spreadsheet, from which you will be able to gain some basic statistics on “potential” squatting activity and a starting point for further investigatory work.</p>
+
+<!--excerpt-->
+
+<p> </p>
+<h2 id="methodology">Methodology</h2>
+
+<p>You will require:</p>
+
+<ol>
+  <li>A domain name [domain]</li>
+  <li>A list of common spelling mistakes of the domain name</li>
+  <li>A list of TLD/ccTLD</li>
+  <li>Linux/OSX terminal and an Internet connection</li>
+</ol>
+
+<p>We will use the Linux/OSX terminal to create and combine the typo and TLD lists into a master list of candidate domain names, then we will use the <a href="https://en.wikipedia.org/wiki/Dig_(command)">dig</a> (domain information groper) <sup><a href="#4">4</a>,<a href="#5">5</a></sup> utility to execute dig <a href="http://searchnetworking.techtarget.com/definition/start-of-authority-record">Start of Authority</a> (SOA) <sup><a href="#6">6</a></sup> queries to determine if the candidate domain has been registered and finish by using grep to gather all results and create a findings spreadsheet.</p>
+
+<h3 id="typos">Typos</h3>
+
+<p>To create a list of possible typographical mistakes for a given domain name we will use the <a href="https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance">Damerau–Levenshtein distance</a> (DL) <sup><a href="#7">7</a></sup> which is the the minimum number of operations; insertions, deletions or substitutions of a single character, and/or the transposition of two adjacent characters required to change one word into another.</p>
+
+<p>We will use a Damerau–Levenshtein distance of 1, (a single edit) and the UTF8 domain name character set! for example:</p>
+
+<table>
+<colgroup>
+<col width="5%" />
+<col width="10%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td></td>
+<td>string</td>
+<td>domain</td>
+</tr>
+
+<tr>
+<td></td>
+<td>charset</td>
+<td>abcdefghijklmnopqrstuvwxyz0123456789-</td>
+</tr>
+
+<tr>
+<td></td>
+<td>insertion</td>
+<td>adomain daomain domaain ...</td>
+</tr>
+
+<tr>
+<td></td>
+<td>deletion</td>
+<td> omain dmain doain ...</td>
+</tr>
+
+<tr>
+<td></td>
+<td>substitution</td>
+<td>aomain bomain comain ...</td>
+</tr>
+
+<tr>
+<td></td>
+<td>transposition</td>
+<td>odmain dmoain doamin ... (adjacent character transposition)</td>
+</tr>
+
+</tbody>
+</table>
+<p> </p>
+
+<p>To create a file “[DOMAIN]-candidate-domains.txt” containing a list of DL 1 typo’s, cut&amp;paste the following into a terminal, replacing “domain” with the domain name of your choosing, without a TLD/ccTLD appended to the end! For example: if the domain name you wish to test is “google.com”, replace “domain” with “google”</p>
+
+<h4 id="insertion">insertion</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOMAIN="domain"; \
+OUTPUT="$DOMAIN-candidate-domains.csv"; \
+charset="abcdefghijklmnopqrstuvwxyz0123456789-"; \
+type="i"; \
+read -a CHARS &lt;&lt;&lt;"$(echo $charset | sed 's/./&amp; /g')"; \
+for (( x=0; x&lt;=${#DOMAIN}; x++ )); do  \
+START=${DOMAIN[@]:0:$x} ; \
+END=${DOMAIN[@]:$x:${#DOMAIN}} ; \
+for CHAR in "${CHARS[@]}"; do \
+echo "$START$CHAR$END,$type" |tee -a $OUTPUT ; \
+done; \
+done
+</code></pre></div></div>
+
+<h4 id="deletion">deletion</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOMAIN="domain"; \
+OUTPUT="$DOMAIN-candidate-domains.csv"; \
+type="d"; \
+read -a CHARS &lt;&lt;&lt;"$(echo $DOMAIN | sed 's/./&amp; /g')"; \
+for (( x=0; x&lt;=${#DOMAIN}-1; x++ )); do  \
+s=""; \
+for (( y=0; y&lt;=${#DOMAIN}-1; y++ )); do  \
+if [ $x != $y ]; then \
+s=$s${CHARS[$y]} ; \
+fi; \
+done; \
+echo "$s,$type" |tee -a $OUTPUT ; \
+done
+</code></pre></div></div>
+
+<h4 id="substitution">substitution</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOMAIN="domain"; \
+OUTPUT="$DOMAIN-candidate-domains.csv"; \
+charset="abcdefghijklmnopqrstuvwxyz0123456789-"; \
+type="s"; \
+read -a CHARS &lt;&lt;&lt;"$(echo $charset | sed 's/./&amp; /g')"; \
+for (( x=0; x&lt;=${#DOMAIN}-1; x++ )); do  \
+START=${DOMAIN[@]:0:$x} ; \
+END=${DOMAIN[@]:$x+1:${#DOMAIN}} ; \
+for CHAR in "${CHARS[@]}"; do \
+echo "$START$CHAR$END,$type" |tee -a $OUTPUT ; \
+done; \
+done
+</code></pre></div></div>
+
+<h4 id="transposition">transposition</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOMAIN="domain"; \
+OUTPUT="$DOMAIN-candidate-domains.csv"; \
+type="t"; \
+for (( x=0; x&lt;=${#DOMAIN}-2; x++ )); do  \
+START=${DOMAIN[@]:0:$x} ; \
+MID=${DOMAIN[@]:$x+1:1}${DOMAIN[@]:$x:1} ; \
+END=${DOMAIN[@]:$x+2:${#DOMAIN}} ; \
+echo "$START$MID$END,$type" |tee -a $OUTPUT ; \
+done
+</code></pre></div></div>
+
+<p>Open the “[DOMAIN]-candidate-domains.txt” in a text editor and sort/unique the contents. Remove any candidate domain names that start or end with a hyphen they are invalid. For a domain name of “domain”, you should have a file containing 477 variations of “domain” from 0domain to zomain.</p>
+
+<h3 id="tldcctld">TLD/ccTLD</h3>
+
+<p>You have several choices for creating a list of TLD’s, “[?????]-tlds.txt”. However please be cognisant of the consequences; If you have 477 variations and 10 TLD’s you will be executing 4770 dig queries and creating 4770 files.</p>
+
+<ul>
+  <li>
+    <p>TLD’s by Popularity</p>
+
+    <p>W3Techs Web Technology Surveys <sup><a href="#8">8</a></sup> maintains a “Usage of top level domains for websites” list</p>
+
+    <p><a href="https://w3techs.com/technologies/overview/top_level_domain/all">https://w3techs.com/technologies/overview/top_level_domain/all</a></p>
+
+    <p>top_10_tlds.txt</p>
+
+    <p>.com .ru .org .net .de .jp .uk .br .it .pl</p>
+  </li>
+  <li>
+    <p>TLD’s by Abuse</p>
+
+    <p>Spamhaus <sup><a href="#9">9</a></sup> maintains many interesting list on spamming activity, the TLDs with the worst reputations for spam operations are:</p>
+
+    <p><a href="https://www.spamhaus.org/statistics/tlds/">https://www.spamhaus.org/statistics/tlds/</a></p>
+
+    <p>abused-tlds.txt</p>
+
+    <p>.biz .click .cricket .gdn .gq .ml .party .review .study .top</p>
+  </li>
+</ul>
+
+<h3 id="dig">DIG</h3>
+
+<p>Once you have your “[DOMAIN]-candidate-domains.txt” and “abused-tlds.txt” files you can cut&amp;paste the following into the terminal. It will loop through both files, executing a dig SOA query for each candidate domain and piping the results into files.</p>
+
+<p>Note: it will take “some time”! You can CTRL-C at any time to stop it and re-cut&amp;paste later and it will pick-up from where it left off.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOMAIN="domain"; \
+if [ ! -d $DOMAIN ]; then mkdir $DOMAIN; fi; \
+while read TLD; do \
+while IFS=, read domain type; do \
+CMD="dig @8.8.4.4 $domain$TLD SOA"; \
+OUTPUT=$(echo $CMD |sed 's/ /_/g'); \
+if [ ! -f $DOMAIN/$OUTPUT-$type.txt ]; then \
+echo "$CMD &gt;$DOMAIN/$OUTPUT-$type.txt"; \
+$CMD &gt;$DOMAIN/$OUTPUT-$type.txt; \
+fi; \
+done &lt; $DOMAIN-candidate-domains.csv; \
+done &lt; abused-tlds.txt
+</code></pre></div></div>
+
+<h3 id="results">Results</h3>
+
+<p>To create a “$DOMAIN-domains.csv” file cut&amp;paste the following into the terminal. It will grep each file in the $DOMAIN directory, piping the results into the .csv file. It will also attempt to determine the TLD of the domain and domain of the SOA’s Name Server for ease of sorting and categorising.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOMAIN="domain"; \
+OUTPUT="$DOMAIN-domains.csv"; \
+if [ -f $OUTPUT ]; then mv -f $OUTPUT $OUTPUT.bak; fi; \
+TAB=$'\t' ; \
+echo "domain,ttl,net,type,ns,email,serial,refresh,retry,expire,minimum,dl,tld,soadomain" |tee -a $OUTPUT ; \
+for FILE in $DOMAIN/dig*.txt; do \
+dl=$(echo "$FILE" |cut -d "_" -f 4 |sed "s/SOA-//g" |sed "s/.txt//g"); \
+domain=$(echo "$FILE" |cut -d "_" -f 3); \
+count=$(echo $domain |grep -o "\." |wc -l) ; \
+if [ $count == 1 ]; then \
+tld=$(echo $domain |cut -d "." -f 2); \
+elif [ $count == 2 ]; then \
+tld=$(echo $domain |cut -d "." -f 2,3); \
+fi; \
+if grep -q "^$domain" $FILE; then \
+LINE=$(grep "^$domain" $FILE |sed "s/${TAB}/ /g" |sed "s/  / /g" |sed "s/ /,/g" |tr '[:upper:]' '[:lower:]'); \
+soa=$(echo $LINE |cut -d , -f 5); \
+COUNT=$(echo $soa |grep -o "\." |wc -l) ; \
+if [ $COUNT == 2 ]; then \
+SOADOMAIN=$soa; \
+elif [ $COUNT == 3 ]; then \
+SOADOMAIN=$(echo $soa |cut -d "." -f 2,3); \
+else \
+SOADOMAIN=$(echo $soa |cut -d "." -f 2,3,4); \
+fi; \
+echo "$LINE,$dl,$tld,$SOADOMAIN" |tee -a $OUTPUT ; \
+else \
+echo "$FILE" |cut -d "_" -f 3 |tee -a $OUTPUT ; \
+fi; \
+done
+</code></pre></div></div>
+
+<p> </p>
+<h2 id="findings">Findings</h2>
+
+<p>The screenshot below is of the “$DOMAIN-domains.csv” spreadsheet for the “domain” domain and using the top 10 most popular TLD’s and the top 10 most abused TLD’s with the ttl, net, serial, refresh, retry, expire and minimum columns remove and sorted by the soadomain column.</p>
+
+<table>
+    <caption align="bottom">
+	
+		findings spreadsheet
+	
+</caption>
+<tr><td><img src="/assets/images/do-you-have-squatters-screenshot.png" alt="findings spreadsheet" /></td></tr>
+</table>
+
+<p>The spreadsheet contains 9540 entries and has identified 707 potential domain squatters that will require individual investigation to determine if they are true Typosquatting domains or not. However, some general observations can be made on the spreadsheet as a whole:</p>
+
+<ul>
+  <li>Domain names that have not been registered, 8833</li>
+  <li>Potential domain squatters that require further investigation, 707</li>
+  <li>Domains that have been registered by <a href="https://en.wikipedia.org/wiki/Domain_parking">domain parking</a> <sup><a href="#10">10</a></sup> companies; domaincontrol.com, parkingcrew.net, sedoparking.com and bodis.com etc.</li>
+  <li>Damerau–Levenshtein statistics; insertion 405, deletion 39, substitution 240 and transposition 21</li>
+  <li>TLD’s statistics; com 224, net 115, de 98, ru 77, org 61 etc.</li>
+  <li>SOA domain statistics; domaincontrol.com 59, uniregistrymarket.link 42, sedoparking.com 29, bodis.com 20, freenom.com 14 etc.</li>
+</ul>
+
+<p> </p>
+<h2 id="conclusion">Conclusion</h2>
+
+<p>These terminal snippets are quite rudimentary and could be easily translated into a more functional programming language to improve the process and to make it more robust and repeatable. However, we hope that as a Proof of Concept for finding potential domain name squatters you found it to be of some value and worth undertaking.</p>
+
+<p>   </p>
+<h3 id="notes">Notes</h3>
+<ol>
+  <li>
+    <p><a name="1"></a>Typosquatting, also called URL hijacking, a sting site, or a fake URL … 
+“<a href="https://en.wikipedia.org/wiki/Typosquatting">Typosquatting</a>” <a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, 23 May 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="2"></a>Squatting is the action of occupying an abandoned or unoccupied area of land or a building …
+“<a href="https://en.wikipedia.org/wiki/Squatting">Squatting</a>” <a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, 11 June 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="3"></a>Proof of Concept (PoC) is a realization of a certain method or idea in order to demonstrate its feasibility …
+“<a href="https://en.wikipedia.org/wiki/Proof_of_concept">Proof of concept</a>” 
+<a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, 11 May 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="4"></a>dig (domain information groper) is a network administration command-line tool for querying Domain Name System (DNS) servers … 
+“<a href="https://en.wikipedia.org/wiki/Dig_(command)">dig (command)</a>” <a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, 7 April 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="5"></a>Heinlein, Paul. “<a href="https://www.madboa.com/geek/dig/">DiG HOWTO - How to use dig to query DNS name servers.</a>” <a href="https://www.madboa.com/">madboa.com</a>, 11 May 2006, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="6"></a>A start of authority (SOA) record is information stored in a domain name system (DNS) zone about that zone and about other DNS records …
+Rouse, Margaret. “<a href="http://searchnetworking.techtarget.com/definition/start-of-authority-record">Start of Authority record</a>” <a href="http://searchnetworking.techtarget.com/">SearchNetworking</a>, April 2007, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="7"></a>In information theory and computer science, the Damerau–Levenshtein distance (named after Frederick J. Damerau and Vladimir I. Levenshtein) is a string metric for measuring the edit distance between two sequences …
+“<a href="https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance">Damerau–Levenshtein distance</a>”
+<a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, 17 April 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="8"></a>“<a href="https://w3techs.com/technologies/overview/top_level_domain/all">Usage of top level domains for websites</a>” 
+<a href="https://w3techs.com">W3Techs Web Technology Surveys</a>, 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="9"></a> “<a href="https://www.spamhaus.org/statistics/tlds/">The 10 Most Abused Top Level Domains</a>” 
+<a href="https://www.spamhaus.org">The Spamhaus Project Ltd</a>, 2017, accessed 1 Jun 2017</p>
+  </li>
+  <li>
+    <p><a name="10"></a>Domain parking refers to the registration of an internet domain name without that domain being associated with any services such as e-mail or a website …
+“<a href="https://en.wikipedia.org/wiki/Domain_parking">Domain parking</a>” <a href="https://www.wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, 23 May 2017, accessed 1 Jun 2017</p>
+  </li>
+</ol>
+
+:ET

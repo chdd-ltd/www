@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<url>
+	<loc>http://blog.chdd.co.uk/ssh-certificate-authorities.html</loc>
+	<lastmod>2021-05-30</lastmod>
+	<changefreq>monthly</changefreq>
+	<priority>0.5</priority>
+</url>
+<url>
+	<loc>http://blog.chdd.co.uk/do-you-have-squatters.html</loc>
+	<lastmod>2021-04-25</lastmod>
+	<changefreq>monthly</changefreq>
+	<priority>0.5</priority>
+</url>
+<url>
+	<loc>http://blog.chdd.co.uk/.com-doppelgangers.html</loc>
+	<lastmod>2021-03-28</lastmod>
+	<changefreq>monthly</changefreq>
+	<priority>0.5</priority>
+</url>
+
+<url>
+	<loc>http://blog.chdd.co.uk/about/</loc>
+	<lastmod>2017-06-01</lastmod>
+	<changefreq>yearly</changefreq>
+	<priority>0.5</priority>
+</url>
+<url>
+	<loc>http://blog.chdd.co.uk/</loc>
+	<lastmod>2017-06-01</lastmod>
+	<changefreq>monthly</changefreq>
+	<priority>0.5</priority>
+</url>
+
+
+</urlset>

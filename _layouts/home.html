@@ -1,0 +1,35 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <h1 class="page-heading"></h1>
+  
+  {{ content }}
+
+  <ul class="post-list">
+    {% for post in site.posts limit:10 %}
+      <li>
+
+        <h1 class="heading"> 
+          <a href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        </h1>
+
+        {% if post.strapline %}
+          <h3 class="strapline">{{ post.strapline | escape }}</h3>
+        {% endif %}
+
+        <span class="date">{{ post.date | date: "%A, %B %-d, %Y" }}</span>
+
+        <p>{{ post.excerpt }}</p>
+
+        <p><a href="{{ post.url | relative_url }}#excerpt">Read more</a>...</p>
+
+      </li>
+    {% endfor %}
+  </ul>
+
+</div>
