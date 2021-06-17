@@ -4,7 +4,9 @@ bundle exec jekyll serve --livereload
 
 - [] Site Logo:
 - [] /favicon.ico
-- [] Home page H1 title not the same as post page H1:
+- [] site footer
+- [] About blurb
+
 
 Writing on GitHub
 https://docs.github.com/en/github/writing-on-github

@@ -15,12 +15,11 @@
 # in the templates via {{ site.myvariable }}.
 title: CHDD Applied Research Ltd
 short_title: CHDD
-email: info@chdd.co.uk
+email: chris@chdd.co.uk
 description: > # this means to ignore newlines until "baseurl:"
-  CHDD Applied Research Ltd is an independent information security research and 
-  consultancy firm that specialises in the development of tools and techniques 
-  to acquire, analyse and disseminate Cybersecurity threat and vulnerability 
-  information. 
+  My name is Chris Davis and I’m an information security professional based in 
+  London, England. This blog is my attempt to force myself to "Write down" the 
+  things I have leant and that it may be of help to someone else. 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 

@@ -4,7 +4,7 @@
 # See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: home
 published: true
-lastmod: 2017-06-01
+lastmod: 2021-06-17
 changefreq: monthly
 priority: 0.5
 ---
