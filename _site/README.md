@@ -4,8 +4,6 @@ bundle exec jekyll serve --livereload
 
 - [] Site Logo:
 - [] /favicon.ico
-- [] site footer
-- [] About blurb
 
 
 Writing on GitHub
