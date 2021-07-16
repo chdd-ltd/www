@@ -328,7 +328,7 @@ We only use watch rules, so they have very little effect on system performance, 
 
 ### References:
 
-- [MITRE ATT&CK - Impair Defenses: Disable or Modify System Firewall](https://www.passwordstore.org)
+- [MITRE ATT&CK - Impair Defenses: Disable or Modify System Firewall](https://attack.mitre.org/techniques/T1562/004/)
 - [man auditd](https://manpages.ubuntu.com/manpages/xenial/en/man8/auditd.8.html)
 - [man ufw](http://manpages.ubuntu.com/manpages/bionic/man8/ufw.8.html)
 
