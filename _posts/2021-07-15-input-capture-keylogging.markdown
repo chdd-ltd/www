@@ -62,21 +62,21 @@ Test:
 
 Log: syslog
 
-    Jul 10 10:53:41 killingtime biot[2837]  : echo "Hello World!"
+    Jul 10 10:53:41 killingtime ubuntu[2837]  : echo "Hello World!"
 
 Log: ausearch -i --start 10/07/21 10:50:00
 
     ----
-    type=PROCTITLE ... proctitle=tee -a /home/biot/.bash_history 
+    type=PROCTITLE ... proctitle=tee -a /home/ubuntu/.bash_history 
     type=PATH ... name=/usr/bin/tee ... 
-    type=CWD ... cwd=/home/biot 
-    type=EXECVE ... a0=tee a1=-a a2=/home/biot/.bash_history 
+    type=CWD ... cwd=/home/ubuntu 
+    type=EXECVE ... a0=tee a1=-a a2=/home/ubuntu/.bash_history 
     type=SYSCALL ... comm=tee exe=/usr/bin/tee ... key=CMD_TEE 
     ----
-    type=PROCTITLE ... proctitle=logger -t biot[2837]   
+    type=PROCTITLE ... proctitle=logger -t ubuntu[2837]   
     type=PATH ... name=/usr/bin/logger ...
-    type=CWD ... cwd=/home/biot 
-    type=EXECVE ... a0=logger a1=-t a2=biot[2837]   
+    type=CWD ... cwd=/home/ubuntu 
+    type=EXECVE ... a0=logger a1=-t a2=ubuntu[2837]   
     type=SYSCALL ... comm=logger exe=/usr/bin/logger ... key=CMD_LOGGER 
 
 Cleanup:
@@ -108,7 +108,7 @@ Test:
 
 Log: tail -f /tmp/.keyboard.log
 
-    10/07/21 11:06:18.1625911578 biot echo "Hello World!"
+    10/07/21 11:06:18.1625911578 ubuntu echo "Hello World!"
 
 Cleanup:
 
